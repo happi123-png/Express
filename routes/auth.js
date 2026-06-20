@@ -176,4 +176,6 @@ router.get('/me', verification, async (req, res) => {
     });
 });
 
+router.get('', async (req, res) => { })
+
 module.exports = router;
