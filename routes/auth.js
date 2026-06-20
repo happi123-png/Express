@@ -20,6 +20,7 @@ const verification = require('../middlewares/verifierToken');
  * type: object
  * required:
  * - nom
+ * - username
  * - email
  * - tel
  * - password
@@ -27,6 +28,9 @@ const verification = require('../middlewares/verifierToken');
  * nom:
  * type: string
  * example: Josquin Bryol
+ * username
+ * type: string
+ * example: HAPPI NJ
  * email:
  * type: string
  * example: josquin@example.com
@@ -42,11 +46,11 @@ const verification = require('../middlewares/verifierToken');
  * 400:
  * description: Champs manquants ou identifiants déjà utilisés.
  */
-router.post('/signup-web', async (req, res) => {
+router.post('/signup-web', async(req, res) => {
     try {
-        const { nom, email, tel, password } = req.body;
+        const { nom, username, email, tel, password } = req.body;
 
-        if (!nom || !email || !tel || !password) {
+        if (!nom || !username || !email || !tel || !password) {
             return res.status(400).json({ Message: 'Tous les champs sont obligatoires' });
         }
 
@@ -67,6 +71,7 @@ router.post('/signup-web', async (req, res) => {
 
         const user = await User.create({
             nom,
+            username,
             email,
             tel,
             password: hash
@@ -116,7 +121,7 @@ router.post('/signup-web', async (req, res) => {
  * 401:
  * description: Identifiants incorrects.
  */
-router.post('/login-web', async (req, res) => {
+router.post('/login-web', async(req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -169,13 +174,13 @@ router.post('/login-web', async (req, res) => {
  * 401:
  * description: Token absent ou invalide.
  */
-router.get('/me', verification, async (req, res) => {
+router.get('/me', verification, async(req, res) => {
     res.status(200).json({
         message: 'Bienvenue sur votre profil',
         user: req.user
     });
 });
 
-router.get('', async (req, res) => { })
+router.get('', async(req, res) => {})
 
 module.exports = router;
